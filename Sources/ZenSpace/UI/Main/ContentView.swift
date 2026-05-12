@@ -34,5 +34,7 @@ struct ContentView: View {
         }
         .padding(16)
         .frame(width: 300)
+        .glassEffect(material: .hudWindow)
+        .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 }
