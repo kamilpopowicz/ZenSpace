@@ -23,6 +23,10 @@ struct ContentView: View {
             Divider()
 
             FocusView()
+
+            Divider()
+
+            BatteryView()
         }
         .padding(16)
         .frame(width: 300)

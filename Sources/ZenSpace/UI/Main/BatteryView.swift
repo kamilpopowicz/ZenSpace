@@ -1,0 +1,83 @@
+import SwiftUI
+
+@MainActor
+final class BatteryViewModel: ObservableObject {
+    @Published var level: Int = 100
+    @Published var isCharging: Bool = false
+    @Published var isLowBattery: Bool = false
+
+    private let batteryService = BatteryService()
+    private let soundService = SoundService()
+    private var lowBatteryNotified = false
+
+    var icon: String {
+        if isCharging { return "battery.100.bolt" }
+        if level > 75 { return "battery.100" }
+        if level > 50 { return "battery.75" }
+        if level > 25 { return "battery.50" }
+        return "battery.25"
+    }
+
+    var color: Color {
+        if isCharging { return .green }
+        if level <= 20 { return .red }
+        if level <= 40 { return .orange }
+        return .primary
+    }
+
+    func start() {
+        batteryService.startMonitoring()
+        soundService.startLockScreenObservation()
+
+        NotificationCenter.default.addObserver(
+            forName: BatteryService.batteryChanged,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in self?.update() }
+        }
+        update()
+    }
+
+    private func update() {
+        level = batteryService.level
+        isCharging = batteryService.isCharging
+        isLowBattery = batteryService.isLowBattery()
+
+        if isLowBattery && !lowBatteryNotified {
+            soundService.play(.lowBattery)
+            lowBatteryNotified = true
+        } else if !isLowBattery {
+            lowBatteryNotified = false
+        }
+    }
+}
+
+struct BatteryView: View {
+    @StateObject private var viewModel = BatteryViewModel()
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: viewModel.icon)
+                .foregroundStyle(viewModel.color)
+                .font(.caption)
+
+            Text("\(viewModel.level)%")
+                .font(.caption)
+                .foregroundStyle(viewModel.color)
+
+            Spacer()
+
+            if viewModel.isCharging {
+                Text("notification.battery.charging")
+                    .font(.caption2)
+                    .foregroundStyle(.green)
+            } else if viewModel.isLowBattery {
+                Text("notification.battery.lowBattery")
+                    .font(.caption2)
+                    .foregroundStyle(.red)
+            }
+        }
+        .onAppear { viewModel.start() }
+    }
+}
