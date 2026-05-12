@@ -7,5 +7,9 @@ struct ZenSpaceApp: App {
             LoginView()
         }
         .menuBarExtraStyle(.window)
+
+        Settings {
+            SettingsView()
+        }
     }
 }
