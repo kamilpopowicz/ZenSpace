@@ -12,6 +12,7 @@ let package = Package(
         .executableTarget(
             name: "ZenSpace",
             path: "Sources/ZenSpace",
+            exclude: ["Info.plist", "ZenSpace.entitlements"],
             resources: [
                 .process("Resources")
             ]

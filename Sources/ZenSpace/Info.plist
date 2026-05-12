@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>ZenSpace</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.zenspace.app</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>13.0</string>
+    <key>LSUIElement</key>
+    <true/>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.productivity</string>
+
+    <!-- Usage Descriptions -->
+    <key>NSCalendarsFullAccessUsageDescription</key>
+    <string>ZenSpace needs your permission to show your upcoming events.</string>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>ZenSpace needs your permission to control and display your playing music.</string>
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>ZenSpace needs your permission to visualize your connected audio devices.</string>
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>ZenSpace needs your permission to validate your license.</string>
+    <key>NSLocationUsageDescription</key>
+    <string>ZenSpace needs your permission to determine your location.</string>
+</dict>
+</plist>

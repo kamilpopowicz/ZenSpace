@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- NOTARIZATION DISABLED - No Apple Developer ID -->
+    <!-- Uncomment and configure when ready for distribution -->
+
+    <!-- Sandbox (required for notarization) -->
+    <!-- <key>com.apple.security.app-sandbox</key><true/> -->
+
+    <!-- Network (license validation) -->
+    <key>com.apple.security.network.client</key>
+    <true/>
+
+    <!-- Calendar access -->
+    <key>com.apple.security.personal-information.calendars</key>
+    <true/>
+
+    <!-- Location (Time to Leave) -->
+    <!-- <key>com.apple.security.personal-information.location</key><true/> -->
+
+    <!-- Bluetooth (AirPods detection) -->
+    <key>com.apple.security.device.bluetooth</key>
+    <true/>
+
+    <!-- Apple Events (media control) -->
+    <key>com.apple.security.automation.apple-events</key>
+    <true/>
+
+    <!-- Hardened Runtime exceptions -->
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+</dict>
+</plist>
