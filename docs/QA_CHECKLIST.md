@@ -2,28 +2,28 @@
 
 ## 🤖 Testy automatyczne (CI / terminal)
 
-### Unit Tests (38 testów)
-- [x] ModelTests — encoding/decoding, defaults, allCases
-- [x] LicenseServiceTests — bypass, activate, trial, deactivate
-- [x] ServiceTests — BatteryService, FocusService lifecycle
-- [x] ViewModelTests — initial states, logic, controls
+### Unit Tests (38 testów) — ✅ ALL PASS
+- [x] ModelTests (15) — encoding/decoding, defaults, allCases
+- [x] LicenseServiceTests (4) — bypass, activate, trial, deactivate
+- [x] ServiceTests (6) — BatteryService, FocusService lifecycle
+- [x] ViewModelTests (12) — initial states, logic, controls
 
-### Smoke Test (terminal)
-- [ ] `swift run` — apka uruchamia się bez crash
-- [ ] Proces żyje przez 5s bez SIGABRT/SIGSEGV
-- [ ] stderr nie zawiera "fatal error" / "assertion failed"
-- [ ] Exit code 0 po graceful kill
+### Smoke Test (terminal) — ✅ PASS
+- [x] `swift run` — apka uruchamia się bez crash
+- [x] Proces żyje przez 5s bez SIGABRT/SIGSEGV
+- [x] stderr nie zawiera "fatal error" / "assertion failed"
+- [x] Exit code 0 po graceful kill
 
-### Walidacja lokalizacji
-- [ ] Wszystkie klucze z `en.lproj` istnieją w `pl.lproj`
-- [ ] Wszystkie klucze z `pl.lproj` istnieją w `en.lproj`
-- [ ] Brak pustych wartości w obu plikach
-- [ ] Format specifiers (%@, %lld) zgadzają się między językami
+### Walidacja lokalizacji — ✅ PASS
+- [x] Wszystkie klucze z `en.lproj` istnieją w `pl.lproj` (264 = 264)
+- [x] Wszystkie klucze z `pl.lproj` istnieją w `en.lproj`
+- [x] Brak pustych wartości w obu plikach
+- [x] Format specifiers (%@, %lld) zgadzają się między językami (35 = 35)
 
-### Build verification
-- [ ] `swift build` — 0 errors, 0 warnings
-- [ ] `swift build -c release` — release build przechodzi
-- [ ] `swift test` — wszystkie testy pass
+### Build verification — ✅ PASS
+- [x] `swift build` — 0 errors, 0 warnings
+- [x] `swift build -c release` — release build przechodzi
+- [x] `swift test` — wszystkie 38 testów pass
 
 ---
 
