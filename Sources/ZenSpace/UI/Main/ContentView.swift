@@ -3,15 +3,20 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack(spacing: 12) {
-            Image(systemName: "brain.head.profile")
-                .font(.largeTitle)
-            Text("ZenSpace")
-                .font(.headline)
-            Text("Focus & Notification Manager")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+            HStack {
+                Image(systemName: "brain.head.profile")
+                    .font(.title3)
+                Text("ZenSpace")
+                    .font(.headline)
+                Spacer()
+            }
+            .padding(.bottom, 4)
+
+            Divider()
+
+            CalendarView()
         }
-        .padding(24)
-        .frame(width: 280)
+        .padding(16)
+        .frame(width: 300)
     }
 }
