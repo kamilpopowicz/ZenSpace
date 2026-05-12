@@ -149,6 +149,9 @@ struct LicenseSettingsTab: View {
 // MARK: - About
 
 struct AboutSettingsTab: View {
+    @State private var updateState: UpdateService.UpdateState = .idle
+    @State private var isChecking = false
+
     var body: some View {
         VStack(spacing: 12) {
             Image(systemName: "brain.head.profile")
@@ -160,10 +163,64 @@ struct AboutSettingsTab: View {
             Text("common.version")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+
             Divider()
-            Button("settings.about.checkUpdates") {}
-                .buttonStyle(.bordered)
+
+            updateSection
         }
         .padding()
+    }
+
+    @ViewBuilder
+    private var updateSection: some View {
+        switch updateState {
+        case .idle:
+            Button("settings.about.checkUpdates") { checkForUpdate() }
+                .buttonStyle(.bordered)
+                .disabled(isChecking)
+        case .checking:
+            ProgressView()
+                .controlSize(.small)
+            Text("common.waiting")
+                .font(.caption)
+        case .available(let release):
+            Text("v\(release.version) available")
+                .font(.caption)
+                .foregroundStyle(.green)
+            Button("common.updateNow") { install(release: release) }
+                .buttonStyle(.borderedProminent)
+        case .upToDate:
+            Label("Up to date", systemImage: "checkmark.circle.fill")
+                .font(.caption)
+                .foregroundStyle(.green)
+        case .downloading(let progress):
+            ProgressView(value: progress)
+                .frame(width: 150)
+        case .installing:
+            Text("Installing...")
+                .font(.caption)
+        case .error(let msg):
+            Text(msg)
+                .font(.caption)
+                .foregroundStyle(.red)
+            Button("settings.about.checkUpdates") { checkForUpdate() }
+                .buttonStyle(.bordered)
+        }
+    }
+
+    private func checkForUpdate() {
+        isChecking = true
+        updateState = .checking
+        Task {
+            updateState = await UpdateService.shared.checkForUpdate()
+            isChecking = false
+        }
+    }
+
+    private func install(release: UpdateService.Release) {
+        updateState = .downloading(0)
+        Task {
+            updateState = await UpdateService.shared.downloadAndInstall(release: release)
+        }
     }
 }
