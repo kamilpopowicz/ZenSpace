@@ -18,10 +18,11 @@ Personal focus & notification manager for macOS. Lives in your menu bar, integra
 
 ## Installation
 
-1. Download the latest `ZenSpace.zip` from [Releases](https://github.com/kamilpopowicz/ZenSpace/releases/latest)
-2. Unzip the archive
-3. Move `ZenSpace.app` to `/Applications`
-4. Launch ZenSpace from Applications
+```bash
+curl -sL https://raw.githubusercontent.com/kamilpopowicz/ZenSpace/main/scripts/install.sh | bash
+```
+
+This downloads the latest release, installs to `/Applications`, and launches the app.
 
 > On first launch, macOS may ask you to confirm opening the app (System Settings → Privacy & Security → Open Anyway).
 
