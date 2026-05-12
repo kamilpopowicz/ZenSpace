@@ -15,6 +15,10 @@ struct ContentView: View {
             Divider()
 
             CalendarView()
+
+            Divider()
+
+            NowPlayingView()
         }
         .padding(16)
         .frame(width: 300)
