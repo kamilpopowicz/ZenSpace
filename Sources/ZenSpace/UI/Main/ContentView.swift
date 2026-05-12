@@ -19,6 +19,10 @@ struct ContentView: View {
             Divider()
 
             NowPlayingView()
+
+            Divider()
+
+            FocusView()
         }
         .padding(16)
         .frame(width: 300)
