@@ -2,63 +2,88 @@
 
 Personal focus & notification manager for macOS. Lives in your menu bar, integrates with your notch.
 
+![macOS 13+](https://img.shields.io/badge/macOS-13.0%2B-blue)
+![Swift 5.10](https://img.shields.io/badge/Swift-5.10-orange)
+![License MIT](https://img.shields.io/badge/license-MIT-green)
+
 ## Features
 
-- **Calendar** — upcoming events from EventKit (today/tomorrow)
-- **Now Playing** — media controls, artwork, metadata via MediaRemote
-- **Focus Modes** — system DND detection with status indicator
-- **Battery** — level monitoring, low battery alerts with sound
-- **BetterDisplay** — detection, launch/terminate observation, OSD
-- **Lock Screen Sounds** — audio feedback on lock/unlock
-- **Auto-update** — checks GitHub Releases, downloads and installs in-place
+- 📅 **Calendar** — upcoming events (today/tomorrow) with colored indicators
+- 🎵 **Now Playing** — media controls, artwork, metadata
+- 🌙 **Focus Modes** — system DND detection with status indicator
+- 🔋 **Battery** — level monitoring, low battery alerts with sound
+- 🖥️ **BetterDisplay** — detection, launch observation, OSD
+- 🔒 **Lock Screen Sounds** — audio feedback on lock/unlock
+- 🔄 **Auto-update** — checks for new versions automatically
 
-## Requirements
+## Installation
 
-- macOS 13.0+
-- Swift 5.10+
+1. Download the latest `ZenSpace.zip` from [Releases](https://github.com/kamilpopowicz/ZenSpace/releases/latest)
+2. Unzip the archive
+3. Move `ZenSpace.app` to `/Applications`
+4. Launch ZenSpace from Applications
 
-## Build
+> On first launch, macOS may ask you to confirm opening the app (System Settings → Privacy & Security → Open Anyway).
 
-```bash
-swift build
-swift run
-```
+## Permissions
 
-## Release
+ZenSpace will ask for the following permissions on first use:
 
-```bash
-./scripts/release.sh 1.0.0
-```
+| Permission | Why |
+|-----------|-----|
+| Calendar | Display your upcoming events |
+| Accessibility | Replace system HUDs (optional) |
+| Bluetooth | Show connected audio devices |
 
-Builds `.app` bundle, tags, and uploads to GitHub Releases.
+Grant them via the in-app prompt or System Settings → Privacy & Security.
 
-## Test
+## Usage
 
-```bash
-swift test
-```
+ZenSpace lives in your **menu bar** (brain icon). Click it to open the popup with:
 
-38 unit tests covering models, services, and ViewModels.
+- Your calendar events
+- Now Playing controls
+- Focus mode status
+- Battery level
 
-## Project Structure
+### Settings
 
-```
-Sources/ZenSpace/
-├── App/            — @main entry point (MenuBarExtra)
-├── Core/
-│   ├── Models/     — License, CalendarEvent, FocusMode, Media, Settings
-│   ├── Services/   — Calendar, Media, Focus, Battery, Display, Sound, Update
-│   └── Data/       — LicenseRepository (Keychain)
-├── UI/
-│   ├── Main/       — ContentView, CalendarView, NowPlayingView, FocusView, BatteryView
-│   ├── Login/      — LicenseView, LoginView, LicenseViewModel
-│   ├── Settings/   — SettingsView (7 tabs)
-│   ├── Components/ — GlassEffect, ProgressiveBlur, NotchView
-│   └── Permissions/— PermissionsView
-├── XPC/            — Protocol + ConnectionManager
-└── Resources/      — en.lproj, pl.lproj, Assets
-```
+Open Settings via `⌘,` or right-click the menu bar icon → Settings.
+
+**Tabs:**
+- **General** — launch at login, hover behavior, haptics, progressive blur
+- **Calendar** — enable/disable, hourly chime, time to leave, transport mode
+- **Now Playing** — quick peek, hide while source app active
+- **Battery** — low battery threshold, sound, hide percentage
+- **Focus** — sound on sleep focus
+- **License** — activation status (currently unlocked)
+- **About** — version info, check for updates
+
+### Updates
+
+ZenSpace checks GitHub Releases for new versions. When an update is available:
+
+1. Go to Settings → About
+2. Click "Check Updates"
+3. Click "Update Now" — the app downloads, replaces itself, and restarts
+
+## Uninstall
+
+1. Quit ZenSpace (right-click menu bar icon → Quit)
+2. Delete `ZenSpace.app` from `/Applications`
+3. Optionally remove preferences: `defaults delete com.zenspace.app`
+
+## Languages
+
+- 🇬🇧 English (default)
+- 🇵🇱 Polski
+
+Language follows your macOS system setting.
+
+## Development
+
+See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for build instructions, architecture, and project structure.
 
 ## License
 
-See [LICENSE](LICENSE).
+[MIT](LICENSE) © Kamil Popowicz
