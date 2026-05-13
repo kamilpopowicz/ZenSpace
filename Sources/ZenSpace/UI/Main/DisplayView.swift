@@ -6,12 +6,13 @@ final class DisplayViewModel: ObservableObject {
     @Published var lastEvent: NotificationType?
 
     private let service = DisplayService()
+    private var observer: NSObjectProtocol?
 
     func start() {
         service.startMonitoring()
         isRunning = service.isBetterDisplayRunning
 
-        NotificationCenter.default.addObserver(
+        observer = NotificationCenter.default.addObserver(
             forName: DisplayService.displayChanged,
             object: nil,
             queue: .main
@@ -26,6 +27,11 @@ final class DisplayViewModel: ObservableObject {
 
     func launch() {
         service.launchBetterDisplay()
+    }
+
+    deinit {
+        if let observer { NotificationCenter.default.removeObserver(observer) }
+        service.stopMonitoring()
     }
 }
 

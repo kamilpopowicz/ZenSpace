@@ -9,6 +9,7 @@ final class BatteryViewModel: ObservableObject {
     private let batteryService = BatteryService()
     private let soundService = SoundService()
     private var lowBatteryNotified = false
+    private var observer: NSObjectProtocol?
 
     var icon: String {
         if isCharging { return "battery.100.bolt" }
@@ -29,7 +30,7 @@ final class BatteryViewModel: ObservableObject {
         batteryService.startMonitoring()
         soundService.startLockScreenObservation()
 
-        NotificationCenter.default.addObserver(
+        observer = NotificationCenter.default.addObserver(
             forName: BatteryService.batteryChanged,
             object: nil,
             queue: .main
@@ -37,6 +38,11 @@ final class BatteryViewModel: ObservableObject {
             Task { @MainActor in self?.update() }
         }
         update()
+    }
+
+    deinit {
+        if let observer { NotificationCenter.default.removeObserver(observer) }
+        batteryService.stopMonitoring()
     }
 
     private func update() {

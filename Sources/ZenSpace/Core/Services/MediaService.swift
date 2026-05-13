@@ -2,13 +2,12 @@ import Foundation
 import AppKit
 
 // MARK: - MediaRemote private framework bridge
-// Uses MRMediaRemote via dynamic loading (private API used by Alcove/other menu bar apps)
 
-private let bundle = CFBundleCreate(kCFAllocatorDefault, NSURL(fileURLWithPath: "/System/Library/PrivateFrameworks/MediaRemote.framework"))
+private let bundle: CFBundle? = CFBundleCreate(kCFAllocatorDefault, NSURL(fileURLWithPath: "/System/Library/PrivateFrameworks/MediaRemote.framework"))
 
-private let MRMediaRemoteGetNowPlayingInfoPointer = CFBundleGetFunctionPointerForName(bundle, "MRMediaRemoteGetNowPlayingInfo" as CFString)
-private let MRMediaRemoteSendCommandPointer = CFBundleGetFunctionPointerForName(bundle, "MRMediaRemoteSendCommand" as CFString)
-private let MRMediaRemoteRegisterForNowPlayingNotificationsPointer = CFBundleGetFunctionPointerForName(bundle, "MRMediaRemoteRegisterForNowPlayingNotifications" as CFString)
+private let MRMediaRemoteGetNowPlayingInfoPointer = bundle.flatMap { CFBundleGetFunctionPointerForName($0, "MRMediaRemoteGetNowPlayingInfo" as CFString) }
+private let MRMediaRemoteSendCommandPointer = bundle.flatMap { CFBundleGetFunctionPointerForName($0, "MRMediaRemoteSendCommand" as CFString) }
+private let MRMediaRemoteRegisterForNowPlayingNotificationsPointer = bundle.flatMap { CFBundleGetFunctionPointerForName($0, "MRMediaRemoteRegisterForNowPlayingNotifications" as CFString) }
 
 private typealias MRMediaRemoteGetNowPlayingInfoFunction = @convention(c) (DispatchQueue, @escaping ([String: Any]) -> Void) -> Void
 private typealias MRMediaRemoteSendCommandFunction = @convention(c) (UInt32, UnsafeRawPointer?) -> Void
@@ -25,7 +24,10 @@ private enum MRCommand: UInt32 {
 final class MediaService {
     static let nowPlayingChanged = Notification.Name("com.zenspace.nowPlayingChanged")
 
+    private var isRegistered = false
+
     func register() {
+        guard !isRegistered else { return }
         guard let pointer = MRMediaRemoteRegisterForNowPlayingNotificationsPointer else { return }
         let register = unsafeBitCast(pointer, to: MRMediaRemoteRegisterFunction.self)
         register(DispatchQueue.main)
@@ -36,6 +38,17 @@ final class MediaService {
             name: NSNotification.Name("kMRMediaRemoteNowPlayingInfoDidChangeNotification"),
             object: nil
         )
+        isRegistered = true
+    }
+
+    func unregister() {
+        guard isRegistered else { return }
+        DistributedNotificationCenter.default().removeObserver(self)
+        isRegistered = false
+    }
+
+    deinit {
+        unregister()
     }
 
     func getNowPlayingInfo(completion: @escaping (MediaMetadata?) -> Void) {

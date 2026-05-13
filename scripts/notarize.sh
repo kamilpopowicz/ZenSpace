@@ -9,17 +9,19 @@
 
 set -e
 
-# === CONFIGURATION (fill in APP_PASSWORD when ready) ===
-TEAM_ID="SY8DWFNG8P"
-APPLE_ID="kamipopowicz@icloud.com"
-APP_PASSWORD="xxxx-xxxx-xxxx-xxxx"  # Generate at appleid.apple.com → Security → App-Specific Passwords
+# === CONFIGURATION (from environment variables) ===
+TEAM_ID="${ZENSPACE_TEAM_ID:-SY8DWFNG8P}"
+APPLE_ID="${ZENSPACE_APPLE_ID:-kamipopowicz@icloud.com}"
+APP_PASSWORD="${ZENSPACE_APP_PASSWORD:-}"
 BUNDLE_ID="com.zenspace.app"
 APP_NAME="ZenSpace"
 
-echo "⚠️  Notarization is DISABLED - APP_PASSWORD not configured."
-echo "    Generate one at: appleid.apple.com → Security → App-Specific Passwords"
-echo "    Then replace the placeholder in this script."
-exit 0
+if [ -z "$APP_PASSWORD" ]; then
+    echo "⚠️  Notarization is DISABLED - ZENSPACE_APP_PASSWORD not set."
+    echo "    Generate one at: appleid.apple.com → Security → App-Specific Passwords"
+    echo "    Then: export ZENSPACE_APP_PASSWORD=xxxx-xxxx-xxxx-xxxx"
+    exit 0
+fi
 
 # === BUILD ===
 echo "🔨 Building release..."

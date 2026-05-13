@@ -7,6 +7,7 @@ final class MediaViewModel: ObservableObject {
     @Published var isPlaying: Bool = false
 
     private let service = MediaService()
+    private var observer: NSObjectProtocol?
 
     var title: String { metadata?.title ?? String(localized: "media.notPlaying") }
     var artist: String { metadata?.artist ?? "" }
@@ -15,7 +16,7 @@ final class MediaViewModel: ObservableObject {
 
     func start() {
         service.register()
-        NotificationCenter.default.addObserver(
+        observer = NotificationCenter.default.addObserver(
             forName: MediaService.nowPlayingChanged,
             object: nil,
             queue: .main
@@ -25,6 +26,10 @@ final class MediaViewModel: ObservableObject {
             }
         }
         refresh()
+    }
+
+    deinit {
+        if let observer { NotificationCenter.default.removeObserver(observer) }
     }
 
     func refresh() {
@@ -44,14 +49,14 @@ final class MediaViewModel: ObservableObject {
     func next() {
         service.nextTrack()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-            self?.refresh()
+            Task { @MainActor in self?.refresh() }
         }
     }
 
     func previous() {
         service.previousTrack()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-            self?.refresh()
+            Task { @MainActor in self?.refresh() }
         }
     }
 }
