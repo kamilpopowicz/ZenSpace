@@ -32,6 +32,14 @@ final class SoundService {
         )
     }
 
+    func stopObservation() {
+        DistributedNotificationCenter.default().removeObserver(self)
+    }
+
+    deinit {
+        stopObservation()
+    }
+
     @objc private func handleLock() {
         play(.lock)
     }

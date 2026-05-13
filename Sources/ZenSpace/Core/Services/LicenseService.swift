@@ -55,6 +55,7 @@ final class LicenseService {
 
     private func hardwareUUID() -> String {
         let service = IOServiceGetMatchingService(kIOMainPortDefault, IOServiceMatching("IOPlatformExpertDevice"))
+        guard service != 0 else { return UUID().uuidString }
         defer { IOObjectRelease(service) }
         guard let uuid = IORegistryEntryCreateCFProperty(service, "IOPlatformUUID" as CFString, kCFAllocatorDefault, 0)?
             .takeRetainedValue() as? String else {

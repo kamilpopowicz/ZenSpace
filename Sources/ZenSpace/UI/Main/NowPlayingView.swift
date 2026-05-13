@@ -2,17 +2,20 @@ import SwiftUI
 
 struct NowPlayingView: View {
     @StateObject private var viewModel = MediaViewModel()
+    @AppStorage("nowPlayingEnabled") private var enabled = true
 
     var body: some View {
-        VStack(spacing: 10) {
-            if viewModel.hasMedia {
-                mediaInfoView
-                controlsView
-            } else {
-                emptyView
+        if enabled {
+            VStack(spacing: 10) {
+                if viewModel.hasMedia {
+                    mediaInfoView
+                    controlsView
+                } else {
+                    emptyView
+                }
             }
+            .onAppear { viewModel.start() }
         }
-        .onAppear { viewModel.start() }
     }
 
     private var mediaInfoView: some View {

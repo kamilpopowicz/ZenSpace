@@ -40,6 +40,9 @@ struct GeneralSettingsTab: View {
     var body: some View {
         Form {
             Toggle("settings.general.launchAtLogin", isOn: $launchAtLogin)
+                .onChange(of: launchAtLogin) { _ in
+                    LaunchAtLoginService.setEnabled(launchAtLogin)
+                }
             Toggle("settings.general.behaviour.expandOnHover", isOn: $expandOnHover)
             Toggle("settings.general.behaviour.haptics", isOn: $hapticFeedback)
             Toggle("settings.general.behaviour.progressiveBlur", isOn: $progressiveBlur)
@@ -184,20 +187,20 @@ struct AboutSettingsTab: View {
             Text("common.waiting")
                 .font(.caption)
         case .available(let release):
-            Text("v\(release.version) available")
+            Text("update.versionAvailable")
                 .font(.caption)
                 .foregroundStyle(.green)
             Button("common.updateNow") { install(release: release) }
                 .buttonStyle(.borderedProminent)
         case .upToDate:
-            Label("Up to date", systemImage: "checkmark.circle.fill")
+            Label("update.upToDate", systemImage: "checkmark.circle.fill")
                 .font(.caption)
                 .foregroundStyle(.green)
         case .downloading(let progress):
             ProgressView(value: progress)
                 .frame(width: 150)
         case .installing:
-            Text("Installing...")
+            Text("update.installing")
                 .font(.caption)
         case .error(let msg):
             Text(msg)
