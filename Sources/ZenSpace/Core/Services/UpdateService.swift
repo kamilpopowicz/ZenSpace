@@ -1,11 +1,12 @@
 import Foundation
 import AppKit
+import CryptoKit
 
 final class UpdateService {
     static let shared = UpdateService()
 
-    private let repo = "kamilpopowicz/ZenSpace"
-    private let currentVersion: String = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
+    private let currentVersion = AppConstants.APP_VERSION
+    private let allowedURLPrefix = "https://github.com/\(AppConstants.REPO)/"
 
     struct Release: Decodable {
         let tagName: String
@@ -42,7 +43,7 @@ final class UpdateService {
     }
 
     func checkForUpdate() async -> UpdateState {
-        let url = URL(string: "https://api.github.com/repos/\(repo)/releases/latest")!
+        let url = URL(string: "https://api.github.com/repos/\(AppConstants.REPO)/releases/latest")!
         var request = URLRequest(url: url)
         request.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
 
@@ -63,23 +64,44 @@ final class UpdateService {
     }
 
     func downloadAndInstall(release: Release) async -> UpdateState {
-        guard let asset = release.assets.first(where: { $0.name.hasSuffix(".zip") }) else {
+        guard let zipAsset = release.assets.first(where: { $0.name.hasSuffix(".zip") }) else {
             return .error("No zip asset found in release")
         }
 
-        guard let url = URL(string: asset.browserDownloadUrl) else {
+        // URL pinning — only accept downloads from our repo
+        guard zipAsset.browserDownloadUrl.hasPrefix(allowedURLPrefix) else {
+            return .error("Download URL rejected: untrusted source")
+        }
+
+        guard let zipURL = URL(string: zipAsset.browserDownloadUrl) else {
             return .error("Invalid download URL")
         }
 
-        do {
-            // Download
-            let (tempURL, _) = try await URLSession.shared.download(from: url)
+        // Check for SHA256 checksum asset
+        let checksumAsset = release.assets.first(where: { $0.name.hasSuffix(".sha256") })
 
-            // Get app location
-            guard let appPath = Bundle.main.bundlePath as String? else {
-                return .error("Cannot determine app location")
+        do {
+            // Download zip
+            let (tempZip, _) = try await URLSession.shared.download(from: zipURL)
+
+            // Verify checksum if available
+            if let checksumAsset, let checksumURL = URL(string: checksumAsset.browserDownloadUrl) {
+                let (checksumData, _) = try await URLSession.shared.data(from: checksumURL)
+                let expectedHash = String(data: checksumData, encoding: .utf8)?
+                    .trimmingCharacters(in: .whitespacesAndNewlines)
+                    .components(separatedBy: " ").first ?? ""
+
+                let fileData = try Data(contentsOf: tempZip)
+                let actualHash = SHA256.hash(data: fileData).map { String(format: "%02x", $0) }.joined()
+
+                guard actualHash == expectedHash else {
+                    try? FileManager.default.removeItem(at: tempZip)
+                    return .error("Checksum verification failed")
+                }
             }
 
+            // Get app location
+            let appPath = Bundle.main.bundlePath
             let appURL = URL(fileURLWithPath: appPath)
             let parentDir = appURL.deletingLastPathComponent()
             let tempDir = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
@@ -88,30 +110,41 @@ final class UpdateService {
             try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
             let unzip = Process()
             unzip.executableURL = URL(fileURLWithPath: "/usr/bin/unzip")
-            unzip.arguments = ["-o", tempURL.path, "-d", tempDir.path]
+            unzip.arguments = ["-o", tempZip.path, "-d", tempDir.path]
             try unzip.run()
             unzip.waitUntilExit()
 
             guard unzip.terminationStatus == 0 else {
+                try? FileManager.default.removeItem(at: tempDir)
                 return .error("Failed to unzip update")
             }
 
             // Find .app in unzipped contents
             let contents = try FileManager.default.contentsOfDirectory(at: tempDir, includingPropertiesForKeys: nil)
             guard let newApp = contents.first(where: { $0.pathExtension == "app" }) else {
+                try? FileManager.default.removeItem(at: tempDir)
                 return .error("No .app found in update")
             }
 
-            // Replace current app
+            // Replace with rollback support
             let backupURL = parentDir.appendingPathComponent("ZenSpace_backup.app")
             try? FileManager.default.removeItem(at: backupURL)
             try FileManager.default.moveItem(at: appURL, to: backupURL)
-            try FileManager.default.moveItem(at: newApp, to: appURL)
-            try? FileManager.default.removeItem(at: backupURL)
+
+            do {
+                try FileManager.default.moveItem(at: newApp, to: appURL)
+                // Success — remove backup
+                try? FileManager.default.removeItem(at: backupURL)
+            } catch {
+                // Rollback — restore backup
+                try? FileManager.default.moveItem(at: backupURL, to: appURL)
+                try? FileManager.default.removeItem(at: tempDir)
+                return .error("Install failed, rolled back: \(error.localizedDescription)")
+            }
 
             // Cleanup
             try? FileManager.default.removeItem(at: tempDir)
-            try? FileManager.default.removeItem(at: tempURL)
+            try? FileManager.default.removeItem(at: tempZip)
 
             // Restart
             restart()

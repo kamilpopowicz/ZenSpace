@@ -9,6 +9,8 @@ final class CalendarViewModel: ObservableObject {
     @Published var hasAccess: Bool = false
     @Published var isLoading: Bool = false
 
+    @AppStorage("calendarEnabled") private var calendarEnabled = true
+
     private let service = CalendarService()
 
     var todaySection: EventSection {
@@ -19,12 +21,19 @@ final class CalendarViewModel: ObservableObject {
         EventSection(title: "Tomorrow", events: tomorrowEvents)
     }
 
+    var isEnabled: Bool { calendarEnabled }
+
     func requestAccess() async {
         hasAccess = await service.requestAccess()
         if hasAccess { loadEvents() }
     }
 
     func loadEvents() {
+        guard calendarEnabled else {
+            todayEvents = []
+            tomorrowEvents = []
+            return
+        }
         isLoading = true
         todayEvents = service.fetchTodayEvents()
         tomorrowEvents = service.fetchTomorrowEvents()

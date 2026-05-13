@@ -19,16 +19,44 @@ final class FocusService {
     }
 
     func getCurrentMode() -> FocusMode? {
-        // Uses NSDoNotDisturbEnabled from UserDefaults (com.apple.controlcenter)
-        // For full Focus mode detection, we check the DND state
-        let dndEnabled = isDNDEnabled()
-        return dndEnabled ? .doNotDisturb : nil
+        if isDNDEnabled() { return .doNotDisturb }
+        return nil
     }
 
     private func isDNDEnabled() -> Bool {
-        // Check DND via distributed notification center defaults
-        guard let defaults = UserDefaults(suiteName: "com.apple.controlcenter") else { return false }
-        return defaults.bool(forKey: "NSDoNotDisturbEnabled")
+        // macOS 13+: DND state is stored in Focus assertions plist
+        let assertionsPath = NSHomeDirectory() + "/Library/DoNotDisturb/DB/Assertions.json"
+        if FileManager.default.fileExists(atPath: assertionsPath),
+           let data = try? Data(contentsOf: URL(fileURLWithPath: assertionsPath)),
+           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           let storeAssertions = json["data"] as? [[String: Any]],
+           !storeAssertions.isEmpty {
+            return true
+        }
+
+        // Fallback: check via DistributedNotificationCenter state
+        // macOS 12 legacy path
+        if let defaults = UserDefaults(suiteName: "com.apple.controlcenter"),
+           defaults.bool(forKey: "NSDoNotDisturbEnabled") {
+            return true
+        }
+
+        // macOS 13+ alternative: check via Focus status mirror
+        let mirrorPath = NSHomeDirectory() + "/Library/DoNotDisturb/DB/ModeConfigurations.json"
+        if FileManager.default.fileExists(atPath: mirrorPath),
+           let data = try? Data(contentsOf: URL(fileURLWithPath: mirrorPath)),
+           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           let modeData = json["data"] as? [[String: Any]] {
+            for mode in modeData {
+                if let triggers = mode["triggers"] as? [String: Any],
+                   let enabled = triggers["enabledSetting"] as? Int,
+                   enabled == 2 {
+                    return true
+                }
+            }
+        }
+
+        return false
     }
 
     private func checkCurrentMode() {

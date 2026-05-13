@@ -5,6 +5,8 @@ final class XPCConnectionManager: NSObject {
 
     private var connection: NSXPCConnection?
     private var isConnected = false
+    private var reconnectAttempts = 0
+    private let maxReconnectAttempts = 5
 
     private override init() {
         super.init()
@@ -25,15 +27,17 @@ final class XPCConnectionManager: NSObject {
 
         conn.interruptionHandler = { [weak self] in
             self?.isConnected = false
-            // Auto-reconnect after interruption
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self?.connect()
+            guard let self, self.reconnectAttempts < self.maxReconnectAttempts else { return }
+            self.reconnectAttempts += 1
+            DispatchQueue.main.asyncAfter(deadline: .now() + Double(self.reconnectAttempts)) {
+                self.connect()
             }
         }
 
         conn.resume()
         connection = conn
         isConnected = true
+        reconnectAttempts = 0
     }
 
     func disconnect() {

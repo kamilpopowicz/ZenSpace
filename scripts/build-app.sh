@@ -28,6 +28,13 @@ if [ -d "Sources/ZenSpace/Resources/Assets.xcassets" ]; then
     cp -r Sources/ZenSpace/Resources/Assets.xcassets "$RESOURCES_DIR/"
 fi
 
+# Copy sound files from reference bundle
+if [ -d "Contents/Resources" ]; then
+    cp Contents/Resources/*.caf "$RESOURCES_DIR/" 2>/dev/null || true
+    cp Contents/Resources/*.m4a "$RESOURCES_DIR/" 2>/dev/null || true
+    cp Contents/Resources/AppIcon.icns "$RESOURCES_DIR/" 2>/dev/null || true
+fi
+
 # PkgInfo
 echo "APPL????" > "$CONTENTS_DIR/PkgInfo"
 

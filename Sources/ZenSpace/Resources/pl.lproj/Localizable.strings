@@ -283,3 +283,8 @@
 "update.action.remindLater" = "Przypomnij później...";
 "update.action.restart" = "Uruchom ponownie %@...";
 "update.action.updateNow" = "Aktualizuj teraz...";
+
+/* Additional UI strings */
+"update.upToDate" = "Aktualna wersja";
+"update.installing" = "Instalowanie...";
+"update.versionAvailable" = "v%@ dostępna";

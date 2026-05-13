@@ -7,6 +7,7 @@ final class FocusViewModel: ObservableObject {
     @Published var isActive: Bool = false
 
     private let service = FocusService()
+    private var observer: NSObjectProtocol?
 
     var modeName: String {
         guard let mode = currentMode else { return String(localized: "common.off") }
@@ -31,7 +32,7 @@ final class FocusViewModel: ObservableObject {
 
     func start() {
         service.startMonitoring()
-        NotificationCenter.default.addObserver(
+        observer = NotificationCenter.default.addObserver(
             forName: FocusService.focusChanged,
             object: nil,
             queue: .main
@@ -44,6 +45,11 @@ final class FocusViewModel: ObservableObject {
     }
 
     func stop() {
+        service.stopMonitoring()
+    }
+
+    deinit {
+        if let observer { NotificationCenter.default.removeObserver(observer) }
         service.stopMonitoring()
     }
 }
