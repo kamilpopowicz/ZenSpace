@@ -40,21 +40,29 @@ struct SettingsView: View {
 
 struct GeneralSettingsTab: View {
     @AppStorage("launchAtLogin") private var launchAtLogin = false
-    @AppStorage("expandOnHover") private var expandOnHover = true
-    @AppStorage("hapticFeedback") private var hapticFeedback = true
-    @AppStorage("progressiveBlur") private var progressiveBlur = true
-    @AppStorage("hideMenuBarIcon") private var hideMenuBarIcon = false
 
     var body: some View {
         Form {
-            Toggle(L("settings.general.launchAtLogin"), isOn: $launchAtLogin)
-                .onChange(of: launchAtLogin) { _ in
-                    LaunchAtLoginService.setEnabled(launchAtLogin)
-                }
-            Toggle(L("settings.general.behaviour.expandOnHover"), isOn: $expandOnHover)
-            Toggle(L("settings.general.behaviour.haptics"), isOn: $hapticFeedback)
-            Toggle(L("settings.general.behaviour.progressiveBlur"), isOn: $progressiveBlur)
-            Toggle(L("settings.general.hideMenuBarIcon"), isOn: $hideMenuBarIcon)
+            Section {
+                Toggle(L("settings.general.launchAtLogin"), isOn: $launchAtLogin)
+                    .onChange(of: launchAtLogin) { _ in
+                        LaunchAtLoginService.setEnabled(launchAtLogin)
+                    }
+            }
+
+            Section {
+                Text(L("settings.general.comingSoon"))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .italic()
+
+                Toggle(L("settings.general.behaviour.expandOnHover"), isOn: .constant(false))
+                    .disabled(true)
+                Toggle(L("settings.general.behaviour.haptics"), isOn: .constant(false))
+                    .disabled(true)
+                Toggle(L("settings.general.behaviour.progressiveBlur"), isOn: .constant(false))
+                    .disabled(true)
+            }
         }
         .padding()
     }
