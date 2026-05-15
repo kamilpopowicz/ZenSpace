@@ -39,14 +39,24 @@ struct ContentView: View {
             Divider()
 
             HStack(spacing: 12) {
-                Button {
-                    NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
-                } label: {
-                    Label(L("menu.settings"), systemImage: "gear")
-                        .font(.caption)
+                if #available(macOS 14.0, *) {
+                    SettingsLink {
+                        Label(L("menu.settings"), systemImage: "gear")
+                            .font(.caption)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                } else {
+                    Button {
+                        NSApp.activate(ignoringOtherApps: true)
+                        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+                    } label: {
+                        Label(L("menu.settings"), systemImage: "gear")
+                            .font(.caption)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
                 }
-                .buttonStyle(.bordered)
-                .controlSize(.small)
 
                 Spacer()
 

@@ -55,16 +55,16 @@ struct CalendarView: View {
     private var eventsListView: some View {
         VStack(alignment: .leading, spacing: 8) {
             if !viewModel.todayEvents.isEmpty {
-                sectionView(title: "Today", events: viewModel.todayEvents)
+                sectionView(title: "TODAY", events: viewModel.todayEvents)
             }
             if !viewModel.tomorrowEvents.isEmpty {
                 Divider()
-                sectionView(title: "calendar.section.tomorrowFull", events: viewModel.tomorrowEvents)
+                sectionView(title: L("calendar.section.tomorrowFull"), events: viewModel.tomorrowEvents)
             }
         }
     }
 
-    private func sectionView(title: LocalizedStringKey, events: [CalendarEvent]) -> some View {
+    private func sectionView(title: String, events: [CalendarEvent]) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title)
                 .font(.caption2)

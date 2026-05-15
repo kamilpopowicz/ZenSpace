@@ -4,27 +4,35 @@ struct SettingsView: View {
     var body: some View {
         TabView {
             GeneralSettingsTab()
-                .tabItem { Label("settings.tab.general", systemImage: "gear") }
+                .tabItem { Label(L("settings.tab.general"), systemImage: "gear") }
 
             CalendarSettingsTab()
-                .tabItem { Label("common.calendar", systemImage: "calendar") }
+                .tabItem { Label(L("common.calendar"), systemImage: "calendar") }
 
             NowPlayingSettingsTab()
-                .tabItem { Label("common.nowPlaying", systemImage: "music.note") }
+                .tabItem { Label(L("common.nowPlaying"), systemImage: "music.note") }
 
             BatterySettingsTab()
-                .tabItem { Label("common.battery", systemImage: "battery.100") }
+                .tabItem { Label(L("common.battery"), systemImage: "battery.100") }
 
             FocusSettingsTab()
-                .tabItem { Label("common.focus", systemImage: "moon.fill") }
+                .tabItem { Label(L("common.focus"), systemImage: "moon.fill") }
 
             LicenseSettingsTab()
-                .tabItem { Label("settings.tab.license", systemImage: "key.fill") }
+                .tabItem { Label(L("settings.tab.license"), systemImage: "key.fill") }
 
             AboutSettingsTab()
-                .tabItem { Label("settings.tab.about", systemImage: "info.circle") }
+                .tabItem { Label(L("settings.tab.about"), systemImage: "info.circle") }
         }
-        .frame(width: 500, height: 380)
+        .frame(minWidth: 550, minHeight: 400)
+        .onAppear {
+            NSApp.activate(ignoringOtherApps: true)
+            // Bring settings window to front
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                NSApp.windows.first { $0.isVisible && $0.title.contains("Settings") || $0.title.contains("Preferences") }?.makeKeyAndOrderFront(nil)
+                    ?? NSApp.keyWindow?.makeKeyAndOrderFront(nil)
+            }
+        }
     }
 }
 
@@ -39,14 +47,14 @@ struct GeneralSettingsTab: View {
 
     var body: some View {
         Form {
-            Toggle("settings.general.launchAtLogin", isOn: $launchAtLogin)
+            Toggle(L("settings.general.launchAtLogin"), isOn: $launchAtLogin)
                 .onChange(of: launchAtLogin) { _ in
                     LaunchAtLoginService.setEnabled(launchAtLogin)
                 }
-            Toggle("settings.general.behaviour.expandOnHover", isOn: $expandOnHover)
-            Toggle("settings.general.behaviour.haptics", isOn: $hapticFeedback)
-            Toggle("settings.general.behaviour.progressiveBlur", isOn: $progressiveBlur)
-            Toggle("settings.general.hideMenuBarIcon", isOn: $hideMenuBarIcon)
+            Toggle(L("settings.general.behaviour.expandOnHover"), isOn: $expandOnHover)
+            Toggle(L("settings.general.behaviour.haptics"), isOn: $hapticFeedback)
+            Toggle(L("settings.general.behaviour.progressiveBlur"), isOn: $progressiveBlur)
+            Toggle(L("settings.general.hideMenuBarIcon"), isOn: $hideMenuBarIcon)
         }
         .padding()
     }
@@ -63,11 +71,11 @@ struct CalendarSettingsTab: View {
 
     var body: some View {
         Form {
-            Toggle("settings.calendar.enableCalendar", isOn: $calendarEnabled)
-            Toggle("settings.calendar.playHourlyChime", isOn: $chimeEnabled)
-            Toggle("settings.calendar.playSoundOnEvent", isOn: $soundOnEvent)
-            Toggle("settings.calendar.notifyWhenTimeToLeave", isOn: $timeToLeave)
-            Toggle("settings.calendar.showWeatherOnEmptyDay", isOn: $showWeather)
+            Toggle(L("settings.calendar.enableCalendar"), isOn: $calendarEnabled)
+            Toggle(L("settings.calendar.playHourlyChime"), isOn: $chimeEnabled)
+            Toggle(L("settings.calendar.playSoundOnEvent"), isOn: $soundOnEvent)
+            Toggle(L("settings.calendar.notifyWhenTimeToLeave"), isOn: $timeToLeave)
+            Toggle(L("settings.calendar.showWeatherOnEmptyDay"), isOn: $showWeather)
         }
         .padding()
     }
@@ -82,9 +90,9 @@ struct NowPlayingSettingsTab: View {
 
     var body: some View {
         Form {
-            Toggle("common.nowPlaying", isOn: $enabled)
-            Toggle("common.quickPeek", isOn: $quickPeek)
-            Toggle("settings.nowPlaying.hideWhileSourceAppIsActive", isOn: $hideWhileActive)
+            Toggle(L("common.nowPlaying"), isOn: $enabled)
+            Toggle(L("common.quickPeek"), isOn: $quickPeek)
+            Toggle(L("settings.nowPlaying.hideWhileSourceAppIsActive"), isOn: $hideWhileActive)
         }
         .padding()
     }
@@ -100,10 +108,10 @@ struct BatterySettingsTab: View {
 
     var body: some View {
         Form {
-            Toggle("common.warnOnLowBattery", isOn: $warnLow)
-            Stepper("common.lowBatteryThreshold: \(threshold)%", value: $threshold, in: 5...50, step: 5)
-            Toggle("common.playSoundOnLowBattery", isOn: $playSound)
-            Toggle("settings.battery.hidePercentage", isOn: $hidePercentage)
+            Toggle(L("common.warnOnLowBattery"), isOn: $warnLow)
+            Stepper("\(L("common.lowBatteryThreshold")): \(threshold)%", value: $threshold, in: 5...50, step: 5)
+            Toggle(L("common.playSoundOnLowBattery"), isOn: $playSound)
+            Toggle(L("settings.battery.hidePercentage"), isOn: $hidePercentage)
         }
         .padding()
     }
@@ -117,8 +125,8 @@ struct FocusSettingsTab: View {
 
     var body: some View {
         Form {
-            Toggle("common.sound", isOn: $soundEnabled)
-            Toggle("settings.focus.playSoundOnSleepFocus", isOn: $sleepSound)
+            Toggle(L("common.sound"), isOn: $soundEnabled)
+            Toggle(L("settings.focus.playSoundOnSleepFocus"), isOn: $sleepSound)
         }
         .padding()
     }
@@ -133,12 +141,12 @@ struct LicenseSettingsTab: View {
         VStack(spacing: 12) {
             switch viewModel.status {
             case .licensed:
-                Label("license.success.description", systemImage: "checkmark.seal.fill")
+                Label(L("license.success.description"), systemImage: "checkmark.seal.fill")
                     .foregroundStyle(.green)
             case .trial(let hours):
-                Label("common.trial: \(hours)h", systemImage: "clock")
+                Label("\(L("common.trial")): \(hours)h", systemImage: "clock")
             case .expired:
-                Label("common.expired", systemImage: "xmark.seal.fill")
+                Label(L("common.expired"), systemImage: "xmark.seal.fill")
                     .foregroundStyle(.red)
             case .unlicensed:
                 LicenseView(viewModel: viewModel)
@@ -163,7 +171,7 @@ struct AboutSettingsTab: View {
             Text("ZenSpace")
                 .font(.title2)
                 .fontWeight(.semibold)
-            Text("common.version")
+            Text("v\(AppConstants.APP_VERSION)")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
@@ -178,35 +186,35 @@ struct AboutSettingsTab: View {
     private var updateSection: some View {
         switch updateState {
         case .idle:
-            Button("settings.about.checkUpdates") { checkForUpdate() }
+            Button(L("settings.about.checkUpdates")) { checkForUpdate() }
                 .buttonStyle(.bordered)
                 .disabled(isChecking)
         case .checking:
             ProgressView()
                 .controlSize(.small)
-            Text("common.waiting")
+            Text(L("common.waiting"))
                 .font(.caption)
         case .available(let release):
-            Text("update.versionAvailable")
+            Text("v\(release.version) \(L("update.versionAvailable"))")
                 .font(.caption)
                 .foregroundStyle(.green)
-            Button("common.updateNow") { install(release: release) }
+            Button(L("common.updateNow")) { install(release: release) }
                 .buttonStyle(.borderedProminent)
         case .upToDate:
-            Label("update.upToDate", systemImage: "checkmark.circle.fill")
+            Label(L("update.upToDate"), systemImage: "checkmark.circle.fill")
                 .font(.caption)
                 .foregroundStyle(.green)
         case .downloading(let progress):
             ProgressView(value: progress)
                 .frame(width: 150)
         case .installing:
-            Text("update.installing")
+            Text(L("update.installing"))
                 .font(.caption)
         case .error(let msg):
             Text(msg)
                 .font(.caption)
                 .foregroundStyle(.red)
-            Button("settings.about.checkUpdates") { checkForUpdate() }
+            Button(L("settings.about.checkUpdates")) { checkForUpdate() }
                 .buttonStyle(.bordered)
         }
     }
