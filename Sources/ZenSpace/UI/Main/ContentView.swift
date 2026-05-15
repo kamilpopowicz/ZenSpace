@@ -39,28 +39,23 @@ struct ContentView: View {
             Divider()
 
             HStack(spacing: 12) {
-                if #available(macOS 14.0, *) {
-                    SettingsLink {
-                        Label(L("menu.settings"), systemImage: "gear")
-                            .font(.caption)
-                    }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
-                } else {
-                    Button {
-                        // Dismiss the menu bar popup
-                        NSApp.keyWindow?.close()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            NSApp.activate(ignoringOtherApps: true)
+                Button {
+                    // Dismiss the menu bar popup first
+                    NSApp.keyWindow?.close()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        NSApp.activate(ignoringOtherApps: true)
+                        if #available(macOS 14.0, *) {
+                            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+                        } else {
                             NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
                         }
-                    } label: {
-                        Label(L("menu.settings"), systemImage: "gear")
-                            .font(.caption)
                     }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
+                } label: {
+                    Label(L("menu.settings"), systemImage: "gear")
+                        .font(.caption)
                 }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
 
                 Spacer()
 
