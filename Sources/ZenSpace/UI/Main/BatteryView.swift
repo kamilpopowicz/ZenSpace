@@ -75,11 +75,11 @@ struct BatteryView: View {
             Spacer()
 
             if viewModel.isCharging {
-                Text("notification.battery.charging")
+                Text(L("notification.battery.charging"))
                     .font(.caption2)
                     .foregroundStyle(.green)
             } else if viewModel.isLowBattery {
-                Text("notification.battery.lowBattery")
+                Text(L("notification.battery.lowBattery"))
                     .font(.caption2)
                     .foregroundStyle(.red)
             }

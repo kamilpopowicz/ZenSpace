@@ -83,7 +83,7 @@ struct NowPlayingView: View {
         HStack(spacing: 8) {
             Image(systemName: "music.note")
                 .foregroundStyle(.secondary)
-            Text("media.notPlaying")
+            Text(L("media.notPlaying"))
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }

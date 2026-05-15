@@ -9,7 +9,7 @@ final class MediaViewModel: ObservableObject {
     private let service = MediaService()
     private var observer: NSObjectProtocol?
 
-    var title: String { metadata?.title ?? String(localized: "media.notPlaying") }
+    var title: String { metadata?.title ?? L("media.notPlaying") }
     var artist: String { metadata?.artist ?? "" }
     var album: String { metadata?.album ?? "" }
     var hasMedia: Bool { metadata != nil }

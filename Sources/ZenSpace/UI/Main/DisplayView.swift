@@ -57,7 +57,7 @@ struct DisplayView: View {
                 Button {
                     viewModel.launch()
                 } label: {
-                    Text("common.install")
+                    Text(L("common.install"))
                         .font(.caption2)
                 }
                 .buttonStyle(.bordered)

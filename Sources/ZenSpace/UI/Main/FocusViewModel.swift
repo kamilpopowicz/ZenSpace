@@ -10,8 +10,8 @@ final class FocusViewModel: ObservableObject {
     private var observer: NSObjectProtocol?
 
     var modeName: String {
-        guard let mode = currentMode else { return String(localized: "common.off") }
-        return String(localized: String.LocalizationValue("focus.\(mode.rawValue)"))
+        guard let mode = currentMode else { return L("common.off") }
+        return L("focus.\(mode.rawValue)")
     }
 
     var modeIcon: String {

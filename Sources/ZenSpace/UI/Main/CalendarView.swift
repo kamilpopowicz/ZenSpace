@@ -26,10 +26,10 @@ struct CalendarView: View {
             Image(systemName: "calendar.badge.exclamationmark")
                 .font(.title2)
                 .foregroundStyle(.secondary)
-            Text("onboarding.calendar.permissionDescription")
+            Text(String(format: L("onboarding.calendar.permissionDescription"), AppConstants.APP_NAME))
                 .font(.caption)
                 .multilineTextAlignment(.center)
-            Button("onboarding.accessibility.grantPermission") {
+            Button(L("onboarding.accessibility.grantPermission")) {
                 Task { await viewModel.requestAccess() }
             }
             .buttonStyle(.borderedProminent)
@@ -44,7 +44,7 @@ struct CalendarView: View {
             Image(systemName: "calendar")
                 .font(.title3)
                 .foregroundStyle(.secondary)
-            Text("calendar.empty.yourDayIsClear")
+            Text(L("calendar.empty.yourDayIsClear"))
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }

@@ -18,15 +18,18 @@ mkdir -p "$MACOS_DIR" "$RESOURCES_DIR"
 # Copy binary
 cp ".build/release/${APP_NAME}" "$MACOS_DIR/"
 
+# Copy resource bundle (SPM generates this for localized resources)
+RESOURCE_BUNDLE=".build/arm64-apple-macosx/release/ZenSpace_ZenSpace.bundle"
+if [ -d "$RESOURCE_BUNDLE" ]; then
+    cp -r "$RESOURCE_BUNDLE" "$MACOS_DIR/"
+fi
+
 # Copy Info.plist
 cp "Sources/ZenSpace/Info.plist" "$CONTENTS_DIR/"
 
 # Copy resources
 cp -r Sources/ZenSpace/Resources/en.lproj "$RESOURCES_DIR/"
 cp -r Sources/ZenSpace/Resources/pl.lproj "$RESOURCES_DIR/"
-if [ -d "Sources/ZenSpace/Resources/Assets.xcassets" ]; then
-    cp -r Sources/ZenSpace/Resources/Assets.xcassets "$RESOURCES_DIR/"
-fi
 
 # Copy sound files from reference bundle
 if [ -d "Contents/Resources" ]; then
