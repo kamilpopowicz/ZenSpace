@@ -72,18 +72,28 @@ struct GeneralSettingsTab: View {
 
 struct CalendarSettingsTab: View {
     @AppStorage("calendarEnabled") private var calendarEnabled = true
-    @AppStorage("chimeEnabled") private var chimeEnabled = false
-    @AppStorage("soundOnEvent") private var soundOnEvent = true
-    @AppStorage("timeToLeave") private var timeToLeave = true
-    @AppStorage("showWeatherOnEmptyDay") private var showWeather = true
 
     var body: some View {
         Form {
-            Toggle(L("settings.calendar.enableCalendar"), isOn: $calendarEnabled)
-            Toggle(L("settings.calendar.playHourlyChime"), isOn: $chimeEnabled)
-            Toggle(L("settings.calendar.playSoundOnEvent"), isOn: $soundOnEvent)
-            Toggle(L("settings.calendar.notifyWhenTimeToLeave"), isOn: $timeToLeave)
-            Toggle(L("settings.calendar.showWeatherOnEmptyDay"), isOn: $showWeather)
+            Section {
+                Toggle(L("settings.calendar.enableCalendar"), isOn: $calendarEnabled)
+            }
+
+            Section {
+                Text(L("settings.general.comingSoon"))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .italic()
+
+                Toggle(L("settings.calendar.playHourlyChime"), isOn: .constant(false))
+                    .disabled(true)
+                Toggle(L("settings.calendar.playSoundOnEvent"), isOn: .constant(false))
+                    .disabled(true)
+                Toggle(L("settings.calendar.notifyWhenTimeToLeave"), isOn: .constant(false))
+                    .disabled(true)
+                Toggle(L("settings.calendar.showWeatherOnEmptyDay"), isOn: .constant(false))
+                    .disabled(true)
+            }
         }
         .padding()
     }
@@ -93,14 +103,24 @@ struct CalendarSettingsTab: View {
 
 struct NowPlayingSettingsTab: View {
     @AppStorage("nowPlayingEnabled") private var enabled = true
-    @AppStorage("quickPeekEnabled") private var quickPeek = true
-    @AppStorage("hideWhileSourceActive") private var hideWhileActive = false
 
     var body: some View {
         Form {
-            Toggle(L("common.nowPlaying"), isOn: $enabled)
-            Toggle(L("common.quickPeek"), isOn: $quickPeek)
-            Toggle(L("settings.nowPlaying.hideWhileSourceAppIsActive"), isOn: $hideWhileActive)
+            Section {
+                Toggle(L("common.nowPlaying"), isOn: $enabled)
+            }
+
+            Section {
+                Text(L("settings.general.comingSoon"))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .italic()
+
+                Toggle(L("common.quickPeek"), isOn: .constant(false))
+                    .disabled(true)
+                Toggle(L("settings.nowPlaying.hideWhileSourceAppIsActive"), isOn: .constant(false))
+                    .disabled(true)
+            }
         }
         .padding()
     }
@@ -128,13 +148,17 @@ struct BatterySettingsTab: View {
 // MARK: - Focus
 
 struct FocusSettingsTab: View {
-    @AppStorage("focusSoundEnabled") private var soundEnabled = true
-    @AppStorage("soundOnSleepFocus") private var sleepSound = true
-
     var body: some View {
         Form {
-            Toggle(L("common.sound"), isOn: $soundEnabled)
-            Toggle(L("settings.focus.playSoundOnSleepFocus"), isOn: $sleepSound)
+            Text(L("settings.general.comingSoon"))
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .italic()
+
+            Toggle(L("common.sound"), isOn: .constant(false))
+                .disabled(true)
+            Toggle(L("settings.focus.playSoundOnSleepFocus"), isOn: .constant(false))
+                .disabled(true)
         }
         .padding()
     }
