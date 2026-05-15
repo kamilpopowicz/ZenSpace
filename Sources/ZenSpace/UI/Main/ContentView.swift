@@ -48,8 +48,12 @@ struct ContentView: View {
                     .controlSize(.small)
                 } else {
                     Button {
-                        NSApp.activate(ignoringOtherApps: true)
-                        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+                        // Dismiss the menu bar popup
+                        NSApp.keyWindow?.close()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            NSApp.activate(ignoringOtherApps: true)
+                            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+                        }
                     } label: {
                         Label(L("menu.settings"), systemImage: "gear")
                             .font(.caption)
