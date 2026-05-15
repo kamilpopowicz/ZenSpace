@@ -6,10 +6,17 @@ final class BatteryViewModel: ObservableObject {
     @Published var isCharging: Bool = false
     @Published var isLowBattery: Bool = false
 
+    @AppStorage("warnOnLowBattery") private var warnEnabled = true
+    @AppStorage("lowBatteryThreshold") private var threshold = 20
+    @AppStorage("playSoundOnLowBattery") private var playSoundEnabled = true
+    @AppStorage("hidePercentage") private var hidePercentage = false
+
     private let batteryService = BatteryService()
     private let soundService = SoundService()
     private var lowBatteryNotified = false
     private var observer: NSObjectProtocol?
+
+    var showPercentage: Bool { !hidePercentage }
 
     var icon: String {
         if isCharging { return "battery.100.bolt" }
@@ -21,8 +28,8 @@ final class BatteryViewModel: ObservableObject {
 
     var color: Color {
         if isCharging { return .green }
-        if level <= 20 { return .red }
-        if level <= 40 { return .orange }
+        if level <= threshold { return .red }
+        if level <= threshold + 20 { return .orange }
         return .primary
     }
 
@@ -48,10 +55,14 @@ final class BatteryViewModel: ObservableObject {
     private func update() {
         level = batteryService.level
         isCharging = batteryService.isCharging
-        isLowBattery = batteryService.isLowBattery()
+        isLowBattery = batteryService.isLowBattery(threshold: threshold)
+
+        guard warnEnabled else { return }
 
         if isLowBattery && !lowBatteryNotified {
-            soundService.play(.lowBattery)
+            if playSoundEnabled {
+                soundService.play(.lowBattery)
+            }
             lowBatteryNotified = true
         } else if !isLowBattery {
             lowBatteryNotified = false
@@ -68,9 +79,11 @@ struct BatteryView: View {
                 .foregroundStyle(viewModel.color)
                 .font(.caption)
 
-            Text("\(viewModel.level)%")
-                .font(.caption)
-                .foregroundStyle(viewModel.color)
+            if viewModel.showPercentage {
+                Text("\(viewModel.level)%")
+                    .font(.caption)
+                    .foregroundStyle(viewModel.color)
+            }
 
             Spacer()
 
