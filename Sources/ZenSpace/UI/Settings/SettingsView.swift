@@ -1,37 +1,36 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @State private var selectedTab = "general"
+
     var body: some View {
-        TabView {
-            GeneralSettingsTab()
-                .tabItem { Label(L("settings.tab.general"), systemImage: "gear") }
-
-            CalendarSettingsTab()
-                .tabItem { Label(L("common.calendar"), systemImage: "calendar") }
-
-            NowPlayingSettingsTab()
-                .tabItem { Label(L("common.nowPlaying"), systemImage: "music.note") }
-
-            BatterySettingsTab()
-                .tabItem { Label(L("common.battery"), systemImage: "battery.100") }
-
-            FocusSettingsTab()
-                .tabItem { Label(L("common.focus"), systemImage: "moon.fill") }
-
-            LicenseSettingsTab()
-                .tabItem { Label(L("settings.tab.license"), systemImage: "key.fill") }
-
-            AboutSettingsTab()
-                .tabItem { Label(L("settings.tab.about"), systemImage: "info.circle") }
+        NavigationSplitView {
+            List(selection: $selectedTab) {
+                Label(L("settings.tab.general"), systemImage: "gear").tag("general")
+                Label(L("common.calendar"), systemImage: "calendar").tag("calendar")
+                Label(L("common.nowPlaying"), systemImage: "music.note").tag("nowplaying")
+                Label(L("common.battery"), systemImage: "battery.100").tag("battery")
+                Label(L("common.focus"), systemImage: "moon.fill").tag("focus")
+                Label(L("settings.tab.license"), systemImage: "key.fill").tag("license")
+                Label(L("settings.tab.about"), systemImage: "info.circle").tag("about")
+            }
+            .listStyle(.sidebar)
+            .navigationSplitViewColumnWidth(min: 180, ideal: 200)
+        } detail: {
+            switch selectedTab {
+            case "general": GeneralSettingsTab()
+            case "calendar": CalendarSettingsTab()
+            case "nowplaying": NowPlayingSettingsTab()
+            case "battery": BatterySettingsTab()
+            case "focus": FocusSettingsTab()
+            case "license": LicenseSettingsTab()
+            case "about": AboutSettingsTab()
+            default: GeneralSettingsTab()
+            }
         }
-        .frame(minWidth: 550, minHeight: 400)
+        .frame(minWidth: 600, minHeight: 400)
         .onAppear {
             NSApp.activate(ignoringOtherApps: true)
-            // Bring settings window to front
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                NSApp.windows.first { $0.isVisible && $0.title.contains("Settings") || $0.title.contains("Preferences") }?.makeKeyAndOrderFront(nil)
-                    ?? NSApp.keyWindow?.makeKeyAndOrderFront(nil)
-            }
         }
     }
 }

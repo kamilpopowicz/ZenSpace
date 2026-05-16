@@ -2,6 +2,9 @@ import SwiftUI
 import AppKit
 
 struct ContentView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.openWindow) private var openWindow
+
     var body: some View {
         VStack(spacing: 12) {
             HStack {
@@ -40,15 +43,10 @@ struct ContentView: View {
 
             HStack(spacing: 12) {
                 Button {
-                    // Dismiss the menu bar popup first
-                    NSApp.keyWindow?.close()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    dismiss()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         NSApp.activate(ignoringOtherApps: true)
-                        if #available(macOS 14.0, *) {
-                            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
-                        } else {
-                            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
-                        }
+                        openWindow(id: "settings")
                     }
                 } label: {
                     Label(L("menu.settings"), systemImage: "gear")
