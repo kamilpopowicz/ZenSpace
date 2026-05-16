@@ -31,11 +31,10 @@ cp "Sources/ZenSpace/Info.plist" "$CONTENTS_DIR/"
 cp -r Sources/ZenSpace/Resources/en.lproj "$RESOURCES_DIR/"
 cp -r Sources/ZenSpace/Resources/pl.lproj "$RESOURCES_DIR/"
 
-# Copy sound files from reference bundle
-if [ -d "Contents/Resources" ]; then
-    cp Contents/Resources/*.caf "$RESOURCES_DIR/" 2>/dev/null || true
-    cp Contents/Resources/*.m4a "$RESOURCES_DIR/" 2>/dev/null || true
-    cp Contents/Resources/AppIcon.icns "$RESOURCES_DIR/" 2>/dev/null || true
+# Copy sound files (if available in project sounds directory)
+if [ -d "Sources/ZenSpace/Resources/Sounds" ]; then
+    cp Sources/ZenSpace/Resources/Sounds/*.caf "$RESOURCES_DIR/" 2>/dev/null || true
+    cp Sources/ZenSpace/Resources/Sounds/*.m4a "$RESOURCES_DIR/" 2>/dev/null || true
 fi
 
 # PkgInfo

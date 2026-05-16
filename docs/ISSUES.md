@@ -86,6 +86,8 @@ Swipe horizontal = skip, vertical = toggle.
 #### #28 — NowPlaying: hide while source app active [v2.0.0]
 #### #29 — Focus: sound on mode change [v2.0.0]
 #### #30 — Hide menu bar icon with keyboard shortcut [v2.0.0]
+#### #31 — Design custom app animations (transitions, notch, devices) [v2.0.0]
+#### #32 — Create/source CC0 sound effects (lock, unlock, chime, alerts) [v2.0.0]
 
 ---
 
