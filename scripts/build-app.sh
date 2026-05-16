@@ -19,9 +19,10 @@ mkdir -p "$MACOS_DIR" "$RESOURCES_DIR"
 cp ".build/release/${APP_NAME}" "$MACOS_DIR/"
 
 # Copy resource bundle (SPM generates this for localized resources)
+# Bundle.module looks in Bundle.main.bundleURL (root of .app)
 RESOURCE_BUNDLE=".build/arm64-apple-macosx/release/ZenSpace_ZenSpace.bundle"
 if [ -d "$RESOURCE_BUNDLE" ]; then
-    cp -r "$RESOURCE_BUNDLE" "$MACOS_DIR/"
+    cp -r "$RESOURCE_BUNDLE" "$BUNDLE_DIR/"
 fi
 
 # Copy Info.plist
@@ -30,6 +31,11 @@ cp "Sources/ZenSpace/Info.plist" "$CONTENTS_DIR/"
 # Copy resources
 cp -r Sources/ZenSpace/Resources/en.lproj "$RESOURCES_DIR/"
 cp -r Sources/ZenSpace/Resources/pl.lproj "$RESOURCES_DIR/"
+
+# Copy app icon
+if [ -f "Sources/ZenSpace/Resources/AppIcon.icns" ]; then
+    cp Sources/ZenSpace/Resources/AppIcon.icns "$RESOURCES_DIR/"
+fi
 
 # Copy sound files (if available in project sounds directory)
 if [ -d "Sources/ZenSpace/Resources/Sounds" ]; then
