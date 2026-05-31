@@ -49,6 +49,28 @@ struct GeneralSettingsTab: View {
                     }
             }
 
+            Section("Language") {
+                Picker("Language", selection: Binding(
+                    get: { UserDefaults.standard.string(forKey: "appLanguage") ?? "system" },
+                    set: { newValue in
+                        UserDefaults.standard.set(newValue, forKey: "appLanguage")
+                        // Restart app to apply
+                        let url = URL(fileURLWithPath: Bundle.main.bundlePath)
+                        NSWorkspace.shared.openApplication(at: url, configuration: .init())
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            NSApp.terminate(nil)
+                        }
+                    }
+                )) {
+                    Text("System").tag("system")
+                    Text("🇬🇧 English").tag("en")
+                    Text("🇵🇱 Polski").tag("pl")
+                }
+                Text("App restarts on language change.")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+
             Section {
                 Text(L("settings.general.comingSoon"))
                     .font(.caption)

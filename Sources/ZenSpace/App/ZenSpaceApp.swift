@@ -4,6 +4,9 @@ import SwiftUI
 struct ZenSpaceApp: App {
     @Environment(\.openWindow) private var openWindow
 
+    init() {
+    }
+
     var body: some Scene {
         MenuBarExtra("ZenSpace", systemImage: "brain.head.profile") {
             LoginView()

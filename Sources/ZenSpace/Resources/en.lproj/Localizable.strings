@@ -1,4 +1,3 @@
-/* Calendar */
 "calendar.empty.noEvents" = "No events";
 "calendar.empty.noEventsToday" = "No events today";
 "calendar.empty.noMoreEventsToday" = "No more events today";
@@ -14,8 +13,6 @@
 "calendar.hiddenEvents.single" = "%lld event";
 "calendar.section.tomorrow" = "TMRW";
 "calendar.section.tomorrowFull" = "Tomorrow";
-
-/* Common */
 "common.activate" = "Activate";
 "common.allowedNotifications" = "Allowed Notifications";
 "common.battery" = "Battery";
@@ -49,8 +46,6 @@
 "common.version" = "Version %@";
 "common.waiting" = "Waiting...";
 "common.warnOnLowBattery" = "Warn on low battery";
-
-/* Focus */
 "focus.doNotDisturb" = "Do Not Disturb";
 "focus.driving" = "Driving";
 "focus.fitness" = "Fitness";
@@ -61,15 +56,11 @@
 "focus.reduceInterruptions" = "Reduce Interruptions";
 "focus.sleep" = "Sleep";
 "focus.work" = "Work";
-
-/* Intro */
 "intro.description" = "It bubbles up notifications, alerts and activities, fluidly transforming itself into your notch.";
 "intro.footer" = "It's an entirely new way to experience Mac.";
 "intro.gesture.expandedView" = "Tap to show expanded view";
 "intro.gesture.skipMedia" = "Swipe horizontally to skip media";
 "intro.gesture.toggleOpen" = "Swipe vertically to toggle open";
-
-/* License */
 "license.action.activateLicense" = "Activate License";
 "license.action.purchase" = "Purchase %@...";
 "license.action.startTrial" = "Start Trial";
@@ -89,13 +80,9 @@
 "license.success.devicesUsed" = "Used %1$lld/%2$lld devices";
 "license.title.activate" = "Activate %@";
 "license.title.trialExpired" = "Trial Expired";
-
-/* Media */
 "media.live" = "Live";
 "media.noTitle" = "No Title";
 "media.notPlaying" = "Not Playing";
-
-/* Menu */
 "menu.about" = "About %@";
 "menu.calendar.dismissEvent" = "Dismiss Event";
 "menu.calendar.join" = "Join %@";
@@ -116,13 +103,9 @@
 "menu.resetOnboarding" = "Reset Onboarding";
 "menu.sendFeedback" = "Send Feedback to %@...";
 "menu.settings" = "Settings...";
-
-/* Notifications */
 "notification.battery.charging" = "Charging";
 "notification.battery.lowBattery" = "Low Battery";
 "notification.battery.lowPower" = "Low Power";
-
-/* Onboarding */
 "onboarding.accessibility.grantPermission" = "Grant Permission";
 "onboarding.accessibility.permissionDescription" = "%@ needs your permission to hide and replace the system HUDs.";
 "onboarding.bluetooth.permissionDescription" = "%@ needs your permission to show your connected audio devices.";
@@ -131,8 +114,6 @@
 "onboarding.music.permissionDescription" = "%@ needs your permission to control and display your playing music.";
 "onboarding.permission.allow" = "Choose \"Allow\" once Apple requests permission to interact on behalf of %@.";
 "onboarding.permission.open" = "Choose \"Open\" once Apple requests permission to interact on behalf of %@.";
-
-/* Settings */
 "settings.about.checkUpdates" = "Check Updates...";
 "settings.about.earlyBirdUpdates" = "Early bird updates";
 "settings.about.feedback.description" = "Share feedback regarding bugs, suggested features, or provide other valuable input.";
@@ -278,13 +259,9 @@
 "settings.tab.fileTray" = "File Tray";
 "settings.tab.general" = "General";
 "settings.tab.license" = "License";
-
-/* Updates */
 "update.action.remindLater" = "Remind Later...";
 "update.action.restart" = "Restart %@...";
 "update.action.updateNow" = "Update Now...";
-
-/* Additional UI strings */
 "update.upToDate" = "Up to date";
 "update.installing" = "Installing...";
 "update.versionAvailable" = "v%@ available";

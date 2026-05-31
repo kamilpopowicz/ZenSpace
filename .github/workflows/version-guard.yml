@@ -1,0 +1,63 @@
+name: Version Guard
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+
+jobs:
+  version-guard:
+    if: github.event.pull_request.draft == false
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate app version against latest tag
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          CONSTANTS_PATH="Sources/ZenSpace/Core/Utilities/Constants.swift"
+          if [[ ! -f "${CONSTANTS_PATH}" ]]; then
+            echo "❌ Missing ${CONSTANTS_PATH}"
+            exit 1
+          fi
+
+          # Extract current version from Constants.swift
+          current_version="$(grep 'APP_VERSION' "${CONSTANTS_PATH}" | sed 's/.*"\(.*\)".*/\1/')"
+          if [[ -z "${current_version}" ]]; then
+            echo "❌ Unable to resolve APP_VERSION from ${CONSTANTS_PATH}"
+            exit 1
+          fi
+
+          # Get latest tag
+          latest_tag="$(git tag -l 'v*' --sort=-v:refname | head -n 1)"
+          if [[ -z "${latest_tag}" ]]; then
+            echo "⚠️ No release tags found (pattern v*). Skipping guard."
+            exit 0
+          fi
+
+          latest_version="${latest_tag#v}"
+
+          # Compare versions
+          highest="$(printf '%s\n%s\n' "${current_version}" "${latest_version}" | sort -V | tail -n 1)"
+          if [[ "${highest}" != "${current_version}" || "${current_version}" == "${latest_version}" ]]; then
+            echo "❌ APP_VERSION must be greater than latest tag version."
+            echo "   Current APP_VERSION=${current_version}"
+            echo "   Latest tag=${latest_tag} (${latest_version})"
+            echo ""
+            echo "   Fix: update APP_VERSION in ${CONSTANTS_PATH}"
+            exit 1
+          fi
+
+          echo "✅ Version guard passed."
+          echo "   Current: APP_VERSION=${current_version}"
+          echo "   Baseline: ${latest_tag} (${latest_version})"

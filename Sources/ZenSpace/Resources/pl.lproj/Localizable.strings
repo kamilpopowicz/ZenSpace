@@ -1,4 +1,3 @@
-/* Calendar */
 "calendar.empty.noEvents" = "Brak wydarzeń";
 "calendar.empty.noEventsToday" = "Brak wydarzeń na dziś";
 "calendar.empty.noMoreEventsToday" = "Brak kolejnych wydarzeń na dziś";
@@ -14,8 +13,6 @@
 "calendar.hiddenEvents.single" = "%lld wydarzenie";
 "calendar.section.tomorrow" = "JUTRO";
 "calendar.section.tomorrowFull" = "Jutro";
-
-/* Common */
 "common.activate" = "Aktywuj";
 "common.allowedNotifications" = "Dozwolone powiadomienia";
 "common.battery" = "Bateria";
@@ -49,8 +46,6 @@
 "common.version" = "Wersja %@";
 "common.waiting" = "Oczekiwanie...";
 "common.warnOnLowBattery" = "Ostrzegaj przy niskim poziomie baterii";
-
-/* Focus */
 "focus.doNotDisturb" = "Nie przeszkadzać";
 "focus.driving" = "Prowadzenie";
 "focus.fitness" = "Fitness";
@@ -61,15 +56,11 @@
 "focus.reduceInterruptions" = "Ogranicz przerywanie";
 "focus.sleep" = "Sen";
 "focus.work" = "Praca";
-
-/* Intro */
 "intro.description" = "Wyświetla powiadomienia, alerty i aktywności, płynnie przekształcając się w Twój notch.";
 "intro.footer" = "To zupełnie nowy sposób korzystania z Maca.";
 "intro.gesture.expandedView" = "Stuknij, aby pokazać rozszerzony widok";
 "intro.gesture.skipMedia" = "Przesuń poziomo, aby pominąć utwór";
 "intro.gesture.toggleOpen" = "Przesuń pionowo, aby otworzyć/zamknąć";
-
-/* License */
 "license.action.activateLicense" = "Aktywuj licencję";
 "license.action.purchase" = "Kup %@...";
 "license.action.startTrial" = "Rozpocznij okres próbny";
@@ -89,13 +80,9 @@
 "license.success.devicesUsed" = "Użyto %1$lld/%2$lld urządzeń";
 "license.title.activate" = "Aktywuj %@";
 "license.title.trialExpired" = "Okres próbny wygasł";
-
-/* Media */
 "media.live" = "Na żywo";
 "media.noTitle" = "Bez tytułu";
 "media.notPlaying" = "Nie odtwarza";
-
-/* Menu */
 "menu.about" = "O %@";
 "menu.calendar.dismissEvent" = "Odrzuć wydarzenie";
 "menu.calendar.join" = "Dołącz do %@";
@@ -116,13 +103,9 @@
 "menu.resetOnboarding" = "Resetuj wdrażanie";
 "menu.sendFeedback" = "Wyślij opinię do %@...";
 "menu.settings" = "Ustawienia...";
-
-/* Notifications */
 "notification.battery.charging" = "Ładowanie";
 "notification.battery.lowBattery" = "Niski poziom baterii";
 "notification.battery.lowPower" = "Tryb oszczędzania energii";
-
-/* Onboarding */
 "onboarding.accessibility.grantPermission" = "Przyznaj uprawnienie";
 "onboarding.accessibility.permissionDescription" = "%@ potrzebuje uprawnień do ukrycia i zastąpienia systemowych HUD-ów.";
 "onboarding.bluetooth.permissionDescription" = "%@ potrzebuje uprawnień do wyświetlania podłączonych urządzeń audio.";
@@ -131,8 +114,6 @@
 "onboarding.music.permissionDescription" = "%@ potrzebuje uprawnień do sterowania i wyświetlania odtwarzanej muzyki.";
 "onboarding.permission.allow" = "Wybierz „Zezwól", gdy Apple poprosi o uprawnienia w imieniu %@.";
 "onboarding.permission.open" = "Wybierz „Otwórz", gdy Apple poprosi o uprawnienia w imieniu %@.";
-
-/* Settings */
 "settings.about.checkUpdates" = "Sprawdź aktualizacje...";
 "settings.about.earlyBirdUpdates" = "Wczesne aktualizacje";
 "settings.about.feedback.description" = "Podziel się opinią dotyczącą błędów, sugerowanych funkcji lub innymi uwagami.";
@@ -278,13 +259,9 @@
 "settings.tab.fileTray" = "Zasobnik";
 "settings.tab.general" = "Ogólne";
 "settings.tab.license" = "Licencja";
-
-/* Updates */
 "update.action.remindLater" = "Przypomnij później...";
 "update.action.restart" = "Uruchom ponownie %@...";
 "update.action.updateNow" = "Aktualizuj teraz...";
-
-/* Additional UI strings */
 "update.upToDate" = "Aktualna wersja";
 "update.installing" = "Instalowanie...";
 "update.versionAvailable" = "v%@ dostępna";
